@@ -1,0 +1,48 @@
+---
+- name: create initial groups for the oracle user
+  group: name={{ item }} state=present
+  with_items:
+    - "{{ oracle_group }}"
+    - "{{ oracle_dba_group }}"
+
+- name: create oracle user
+  user:
+    name: "{{ oracle_user }}"
+    group: "{{ oracle_group }}"
+    groups: "{{ oracle_dba_group }}"
+    home: /home/{{ oracle_user }}
+    shell: /bin/bash
+    password: "{{ oracle_pass }}"
+    append: yes
+
+- name: install oracle 12 preinstall
+  yum: name=oracle-rdbms-server-12cR1-preinstall state=present
+  when: oracle_version[:2] == '12'
+
+- name: install oracle 11 preinstall
+  yum: name=oracle-rdbms-server-11gR2-preinstall state=present
+  when: oracle_version[:2] == '11'
+
+- name: install dependencies
+  yum: name={{ item }} state=present
+  with_items:
+    - unzip
+    - wget
+    - tar
+    - openssl
+    - sudo
+
+- name: set oracle user environment
+  blockinfile:
+    dest: /home/{{ oracle_user }}/.bashrc
+    block: |
+      export ORACLE_BASE={{ ora_user_env.ORACLE_BASE }}
+      export ORACLE_HOME={{ ora_user_env.ORACLE_HOME }}
+      export PATH=$PATH:$ORACLE_HOME/bin
+      export NLS_LANG={{ ora_user_env.NLS_LANG }}
+
+- include: install_db.yml
+  when: oracle_install_db
+
+- name: remove temporary dir {{ oracle_tmp }}
+  file: path={{ oracle_tmp }} state=absent

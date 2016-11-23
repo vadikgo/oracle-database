@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: vladgo
+  description: Oracle installation/configuration role
+  license: MIT
+  min_ansible_version: 2.2
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
+  categories:
+  - database
+  - database:sql
+dependencies: []

@@ -1,0 +1,52 @@
+---
+# tasks for the oracle install
+#
+
+- name: create base folders
+  file:
+    mode: 0755
+    path: "{{ item }}"
+    state: directory
+    group: "{{ oracle_dba_group }}"
+    owner: "{{ oracle_user }}"
+  with_items:
+    - "{{oracle_tmp}}"
+    - "{{oracle_base}}"
+
+- name: unzip installer
+  unarchive:
+    src: "{{ oracle_installer_uri }}/{{ item }}"
+    dest: "{{ oracle_tmp }}"
+    copy: no
+    owner: "{{ oracle_user }}"
+  with_items: "{{oracle_installer}}"
+
+- name: compose the oracle automated install settings
+  template:
+    src: db_inst.rsp
+    dest: "{{ oracle_tmp }}/db_inst.rsp"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_group }}"
+
+- name: install oracle
+  become: yes
+  become_user: "{{ oracle_user }}"
+  environment: "{{ora_user_env}}"
+  command: "{{ oracle_tmp }}/database/runInstaller -silent -force -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile {{ oracle_tmp }}/db_inst.rsp"
+  args:
+      creates: "{{ oracle_base }}/oraInventory/orainstRoot.sh"
+  register: install_result
+
+- block:
+    - name: update listener.ora
+      lineinfile: dest={{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora line="{{item}}"
+      with_items:
+        - DEDICATED_THROUGH_BROKER_LISTENER=ON
+        - DIAG_ADR_ENABLED=off
+
+    - name: general oracle post-installation
+      command: "{{ oracle_base }}/oraInventory/orainstRoot.sh"
+
+    - name: db-specific oracle post-installation
+      command: "{{ ora_user_env.ORACLE_HOME }}/root.sh"
+  when: install_result.changed

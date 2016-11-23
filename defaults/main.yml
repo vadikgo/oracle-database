@@ -1,0 +1,34 @@
+oracle_install_db: yes
+oracle_version: 12.1.0
+oracle_base: /opt/oracle
+oracle_db_home: dbhome_1
+oracle_home: "{{oracle_base}}/product/{{oracle_version}}/{{oracle_db_home}}"
+oracle_hostname: localhost
+# oracle user username
+oracle_user: oracle
+# hashed password for the oracle user
+oracle_pass: "{{ 'oracle' | password_hash('sha512')}}"
+# primary oracle group
+oracle_group: oinstall
+# DBA group
+oracle_dba_group: dba
+oracle_edition: ee
+oracle_tmp: /tmp/oracle
+# shell environment for the oracle user
+ora_user_env:
+  ORACLE_BASE: "{{ oracle_base }}"
+  ORACLE_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}"
+  NLS_LANG: "American_America.UTF8"
+  JAVA_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}/jdk"
+
+# if you need to download the installer files, set the URI here
+oracle_installer_uri: http://10.21.25.212:8000/ora1210
+
+oracle_installer: [p21419221_121020_Linux-x86-64_1of10.zip, p21419221_121020_Linux-x86-64_2of10.zip]
+oracle_latest_patches:
+    - { file_name: patch/p23177536_121020_Linux-x86-64.zip, number: "23177536" }
+    - { file_name: patch/p23054246_121020_Linux-x86-64.zip, number: "23054246" }
+    - { file_name: patch/p22037014_121020_Linux-x86-64.zip, number: "22037014" } # DST25
+    - { file_name: patch/p22873635_121020_Linux-x86-64.zip, number: "22873635" } # DST26
+oracle_opatch: opatch/p6880880_121010_Linux-x86-64.zip
+oracle_opatch_version: 12.2.0.1.5
