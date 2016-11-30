@@ -39,7 +39,7 @@
 
 - block:
     - name: update listener.ora
-      lineinfile: dest={{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora line="{{item}}"
+      lineinfile: dest={{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora line={{item}} create=yes
       with_items:
         - DEDICATED_THROUGH_BROKER_LISTENER=ON
         - DIAG_ADR_ENABLED=off

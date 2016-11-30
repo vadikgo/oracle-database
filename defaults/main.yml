@@ -22,7 +22,7 @@ ora_user_env:
   JAVA_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}/jdk"
 
 # if you need to download the installer files, set the URI here
-oracle_installer_uri: http://10.21.25.212:8000/ora1210
+oracle_installer_uri: http://192.168.1.7:8000/ora1210
 
 oracle_installer: [p21419221_121020_Linux-x86-64_1of10.zip, p21419221_121020_Linux-x86-64_2of10.zip]
 oracle_latest_patches:

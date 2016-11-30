@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: start container
+      docker_container:
+        name: "{{name}}"
+        hostname: "{{name}}"
+        image: oraclelinux:7
+        state: started
+        tty: yes
+        shm_size: 1g
+        keep_volumes: no
+        #volumes:
+        #  - /opt/oracle
+
+    - name: add container to inventory
+      add_host:
+        name: "{{name}}"
+        ansible_host: "{{name}}"
+        ansible_user: root
+        ansible_connection: docker
+        groups: docker
+      changed_when: false
+  vars:
+      name: oracle
+
+- hosts: docker
+  pre_tasks:
+    - name: install epel
+      yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    - name: install ansible
+      yum: name=ansible update_cache=yes
+  roles:
+    - oracle-database
+  vars:
+    oracle_docker: yes
