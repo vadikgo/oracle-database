@@ -21,25 +21,32 @@
     owner: "{{ oracle_user }}"
   with_items: "{{oracle_installer}}"
 
-- name: compose the oracle automated install settings
+- name: compose the oracle automated install and db create settings
   template:
-    src: db_inst.rsp
-    dest: "{{ oracle_tmp }}/db_inst.rsp"
+    src: "{{item}}"
+    dest: "{{ oracle_base }}/{{item}}"
     owner: "{{ oracle_user }}"
     group: "{{ oracle_group }}"
+  with_items:
+    - db_inst.rsp
+    - dbca.rsp.tmpl
 
 - name: install oracle
   become: yes
   become_user: "{{ oracle_user }}"
   environment: "{{ora_user_env}}"
-  command: "{{ oracle_tmp }}/database/runInstaller -silent -force -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile {{ oracle_tmp }}/db_inst.rsp"
+  command: "{{ oracle_tmp }}/database/runInstaller -silent -force -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile {{ oracle_base }}/db_inst.rsp"
   args:
       creates: "{{ oracle_base }}/oraInventory/orainstRoot.sh"
   register: install_result
 
 - block:
     - name: update listener.ora
-      lineinfile: dest={{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora line={{item}} create=yes
+      lineinfile:
+        dest: "{{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora"
+        line: "{{item}}"
+        create: yes
+        owner: "{{oracle_user}}"
       with_items:
         - DEDICATED_THROUGH_BROKER_LISTENER=ON
         - DIAG_ADR_ENABLED=off
@@ -50,3 +57,9 @@
     - name: db-specific oracle post-installation
       command: "{{ ora_user_env.ORACLE_HOME }}/root.sh"
   when: install_result.changed
+
+- name: copy start script
+  copy: src={{item}} dest={{oracle_base}}/{{item}} mode=0775 owner={{oracle_user}}
+  with_items:
+    - createDB.sh
+    - runOracle.sh

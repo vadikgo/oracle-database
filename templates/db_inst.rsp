@@ -18,8 +18,9 @@
 #-------------------------------------------------------------------------------
 # Do not change the following system generated value.
 #-------------------------------------------------------------------------------
+{% if oracle_version == '12.1.0' %}
 oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v12.1.0
-
+{% endif %}
 #-------------------------------------------------------------------------------
 # Specify the installation option.
 # It can be one of the following:

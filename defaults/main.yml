@@ -14,12 +14,15 @@ oracle_group: oinstall
 oracle_dba_group: dba
 oracle_edition: ee
 oracle_tmp: /tmp/oracle
+oracle_total_memory: 2048
 # shell environment for the oracle user
 ora_user_env:
   ORACLE_BASE: "{{ oracle_base }}"
   ORACLE_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}"
   NLS_LANG: "American_America.UTF8"
   JAVA_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}/jdk"
+  ORACLE_SID: ORCLCDB
+  ORACLE_PDB: ORCLPDB1
 
 # if you need to download the installer files, set the URI here
 oracle_installer_uri: http://192.168.1.7:8000/ora1210
