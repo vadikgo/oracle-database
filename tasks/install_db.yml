@@ -63,3 +63,4 @@
   with_items:
     - createDB.sh
     - runOracle.sh
+    - startDB.sh

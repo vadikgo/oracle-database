@@ -121,7 +121,7 @@ if [ -d $ORACLE_BASE/oradata/$ORACLE_SID ]; then
    fi;
 
    # Start database
-   $ORACLE_BASE/$START_FILE;
+   $ORACLE_BASE/startDB.sh;
 
 else
    # Remove database config files, if they exist
