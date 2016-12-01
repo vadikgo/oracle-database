@@ -38,7 +38,9 @@
     block: |
       export ORACLE_BASE={{ ora_user_env.ORACLE_BASE }}
       export ORACLE_HOME={{ ora_user_env.ORACLE_HOME }}
-      export PATH=$PATH:$ORACLE_HOME/bin
+      export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch/:/usr/sbin/:$PATH
+      export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/usr/lib
+      export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
       export NLS_LANG={{ ora_user_env.NLS_LANG }}
 
 - include: install_db.yml

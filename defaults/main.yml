@@ -24,6 +24,8 @@ ora_user_env:
   ORACLE_BASE: "{{ oracle_base }}"
   ORACLE_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}"
   NLS_LANG: "American_America.UTF8"
+  LD_LIBRARY_PATH: $ORACLE_HOME/lib:/usr/lib
+  CLASSPATH: $ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
   JAVA_HOME: "{{ oracle_base }}/product/{{oracle_version}}/{{ oracle_db_home }}/jdk"
   ORACLE_SID: ORCLCDB
   ORACLE_PDB: ORCLPDB1
