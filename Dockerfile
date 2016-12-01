@@ -12,5 +12,6 @@ RUN set -x \
     && cd /tmp/oracle-database/tests \
     && ansible-playbook test_oracle_install.yml -e "oracle_install_db=True oracle_install_db_patch=True"
 
+ENV ORACLE_HOME /opt/oracle
 ENTRYPOINT ["/usr/bin/tini", "--", "su - oracle -c /opt/oracle/runOracle.sh"]
 EXPOSE 1521 1158

@@ -1,4 +1,5 @@
 oracle_install_db: yes
+oracle_install_db_patch: yes
 oracle_version: 12.1.0
 oracle_base: /opt/oracle
 oracle_db_home: dbhome_1

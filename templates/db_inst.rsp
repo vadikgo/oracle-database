@@ -21,6 +21,13 @@
 {% if oracle_version == '12.1.0' %}
 oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v12.1.0
 {% endif %}
+{% if oracle_version == '11.2.0' %}
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v11_2_0
+oracle.install.db.EEOptionsSelection=false
+oracle.install.db.config.starterdb.control=DB_CONTROL
+oracle.install.db.config.starterdb.automatedBackup.enable=false
+oracle.install.db.config.starterdb.enableSecuritySettings=true
+{% endif %}
 #-------------------------------------------------------------------------------
 # Specify the installation option.
 # It can be one of the following:

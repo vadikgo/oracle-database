@@ -64,3 +64,4 @@
     - createDB.sh
     - runOracle.sh
     - startDB.sh
+    - stopDB.sh
