@@ -35,3 +35,6 @@
     - oracle-database
   vars:
     oracle_docker: yes
+    oracle_create_dbca: yes
+    oracle_install_time_update: yes
+    oracle_tmp_cleanup: no

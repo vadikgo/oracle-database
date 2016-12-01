@@ -1,5 +1,6 @@
 oracle_install_db: yes
 oracle_install_db_patch: yes
+oracle_create_dbca: no
 oracle_install_time_update: no
 oracle_version: 12.1.0
 oracle_base: /opt/oracle
@@ -16,6 +17,7 @@ oracle_group: oinstall
 oracle_dba_group: dba
 oracle_edition: ee
 oracle_tmp: /tmp/oracle
+oracle_tmp_cleanup: ansible_connection in ['docker', 'local']
 oracle_total_memory: 2048
 # shell environment for the oracle user
 ora_user_env:

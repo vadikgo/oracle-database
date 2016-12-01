@@ -19,9 +19,9 @@ if [ "$ORACLE_HOME" == "" ]; then
 fi;
 
 # Start Listener
-lsnrctl start
+$ORACLE_HOME/bin/lsnrctl start
 
 # Start database
-sqlplus / as sysdba << EOF
+$ORACLE_HOME/bin/sqlplus / as sysdba << EOF
    STARTUP;
 EOF

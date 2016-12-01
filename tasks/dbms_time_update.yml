@@ -15,13 +15,21 @@
     - upg_tzv_apply.sql
     - upg_tzv_check.sql
 
+- name: start oracle
+  become: yes
+  become_user: "{{ oracle_user }}"
+  environment: "{{ora_user_env}}"
+  command: "{{ oracle_base }}/startDB.sh"
+  register: start_cmd
+  changed_when: start_cmd.stdout.find("Database opened.") != -1
+
 - name: Get current TZ status
   shell: echo "SELECT version FROM v\$timezone_file where version >= {{oracle_tz_version}};" | $ORACLE_HOME/bin/sqlplus -S '/ as sysdba'
   environment: "{{ ora_user_env }}"
   become: yes
   become_user: "{{oracle_user}}"
   register: oracle_tz_version
-  changed_when: no
+  changed_when: oracle_tz_version.stdout.find("no rows selected") != -1
 
 - block:
     - name: Start Oracle TZ Update to version {{oracle_tz_version}}
@@ -41,5 +49,4 @@
       with_items:
         - shutdown immediate
         - startup
-
-  when: oracle_tz_version.stdout.find("no rows selected") != -1
+  when: oracle_tz_version.changed

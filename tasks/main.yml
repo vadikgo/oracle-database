@@ -47,8 +47,12 @@
 - include: dbpatch.yml
   when: oracle_install_db_patch
 
+- include: create_dbca.yml
+  when: oracle_create_dbca
+
 - include: dbms_time_update.yml
   when: oracle_install_time_update
 
 - name: remove temporary dir {{ oracle_tmp }}
   file: path={{ oracle_tmp }} state=absent
+  when: oracle_tmp_cleanup
