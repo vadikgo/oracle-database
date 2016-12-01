@@ -13,5 +13,9 @@ RUN set -x \
     && ansible-playbook test_oracle_install.yml -e "oracle_install_db=True oracle_install_db_patch=True"
 
 ENV ORACLE_HOME /opt/oracle
-ENTRYPOINT ["/usr/bin/tini", "--", "su - oracle -c /opt/oracle/runOracle.sh"]
+ENV ORACLE_SID ORCLCDB
+ENV ORACLE_PDB ORCLPDB1
+fi;
+USER oracle
+ENTRYPOINT ["/usr/bin/tini", "--", "/opt/oracle/runOracle.sh"]
 EXPOSE 1521 1158

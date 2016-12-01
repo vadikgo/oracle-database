@@ -29,32 +29,38 @@
   failed_when: patch_list.rc > 1
   changed_when: no
 
-- block:
-    - name: stop oracle
-      command: "{{oracle_base}}/stopDB.sh"
-      register: stop_cmd
-      ignore_errors: yes
-      changed_when: stop_cmd.stdout.find("ORACLE instance shut down.") != -1
-
-    - name: create patches folders
-      file: name={{ oracle_tmp }}/{{ item.number }} state=directory owner={{ oracle_user }}
-      with_items: "{{oracle_latest_patches}}"
-
-    - name: unzip patches
-      unarchive:
-        src: "{{ oracle_installer_uri }}/{{ item.file_name }}"
-        dest: "{{ oracle_tmp }}/{{ item.number }}"
-        copy: no
-        creates: "{{ oracle_tmp }}/{{ item.number }}/{{ item.number }}"
-        owner: "{{ oracle_user }}"
-      with_items: "{{oracle_latest_patches}}"
-
-    - name: apply latest patch rdbms
-      command: "{{ ora_user_env.ORACLE_HOME }}/OPatch/opatch {{item.apply | default('apply')}} -silent -ocmrf {{ ora_user_env.ORACLE_HOME }}/ocm.rsp {{ oracle_tmp }}/{{ item.number }}/{{ item.number }}/{{ item.subfolder | default('')}}"
-      environment: "{{ ora_user_env }}"
-      become: yes
-      become_user: "{{ oracle_user }}"
-      register: patch_apply
-      changed_when: patch_apply.stdout.find(' successfully applied.') != -1
-      with_items: "{{oracle_latest_patches}}"
+- name: stop oracle
+  command: "{{oracle_base}}/stopDB.sh"
+  environment: "{{ ora_user_env }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  register: stop_cmd
+  ignore_errors: yes
+  changed_when: stop_cmd.stdout.find("ORACLE instance shut down.") != -1
   when: patch_list.stdout.find(item.number) == -1
+  with_items: "{{oracle_latest_patches}}"
+
+- name: create patches folders
+  file: name={{ oracle_tmp }}/{{ item.number }} state=directory owner={{ oracle_user }}
+  when: patch_list.stdout.find(item.number) == -1
+  with_items: "{{oracle_latest_patches}}"
+
+- name: unzip patches
+  unarchive:
+    src: "{{ oracle_installer_uri }}/{{ item.file_name }}"
+    dest: "{{ oracle_tmp }}/{{ item.number }}"
+    copy: no
+    creates: "{{ oracle_tmp }}/{{ item.number }}/{{ item.number }}"
+    owner: "{{ oracle_user }}"
+  when: patch_list.stdout.find(item.number) == -1
+  with_items: "{{oracle_latest_patches}}"
+
+- name: apply latest patch rdbms
+  command: "{{ ora_user_env.ORACLE_HOME }}/OPatch/opatch {{item.apply | default('apply')}} -silent -ocmrf {{ ora_user_env.ORACLE_HOME }}/ocm.rsp {{ oracle_tmp }}/{{ item.number }}/{{ item.number }}/{{ item.subfolder | default('')}}"
+  environment: "{{ ora_user_env }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  register: patch_apply
+  changed_when: patch_apply.stdout.find(' successfully applied.') != -1
+  when: patch_list.stdout.find(item.number) == -1
+  with_items: "{{oracle_latest_patches}}"
