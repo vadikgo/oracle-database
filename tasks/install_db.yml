@@ -40,17 +40,17 @@
       creates: "{{ oracle_base }}/oraInventory/orainstRoot.sh"
   register: install_result
 
-- block:
-    - name: update listener.ora
-      lineinfile:
-        dest: "{{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora"
-        line: "{{item}}"
-        create: yes
-        owner: "{{oracle_user}}"
-      with_items:
-        - DEDICATED_THROUGH_BROKER_LISTENER=ON
-        - DIAG_ADR_ENABLED=off
+- name: update listener.ora
+  lineinfile:
+    dest: "{{ora_user_env.ORACLE_HOME}}/network/admin/listener.ora"
+    line: "{{item}}"
+    create: yes
+    owner: "{{oracle_user}}"
+  with_items:
+    - DEDICATED_THROUGH_BROKER_LISTENER=ON
+    - DIAG_ADR_ENABLED=off
 
+- block:
     - name: general oracle post-installation
       command: "{{ oracle_base }}/oraInventory/orainstRoot.sh"
 

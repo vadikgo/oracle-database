@@ -18,7 +18,7 @@ if [ "$ORACLE_HOME" == "" ]; then
   exit 1;
 fi;
 
-# Start database
+# Stop database
 sqlplus / as sysdba << EOF
    shutdown immediate;
 EOF
