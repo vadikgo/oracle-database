@@ -51,8 +51,8 @@ echo "LISTENER =
 " > $ORACLE_HOME/network/admin/listener.ora
 
 # Start LISTENER and run DBCA
-lsnrctl start &&
-dbca -silent -responseFile $ORACLE_BASE/dbca.rsp ||
+$ORACLE_HOME/bin/lsnrctl start &&
+$ORACLE_HOME/bin/dbca -silent -responseFile $ORACLE_BASE/dbca.rsp ||
  cat /opt/oracle/cfgtoollogs/dbca/$ORACLE_SID/$ORACLE_SID.log
 
 echo "$ORACLE_SID=localhost:1521/$ORACLE_SID" >> $ORACLE_HOME/network/admin/tnsnames.ora
@@ -66,7 +66,7 @@ echo "$ORACLE_PDB=
 )" >> $ORACLE_HOME/network/admin/tnsnames.ora
 
 # Remove second control file, make PDB auto open
-sqlplus / as sysdba << EOF
+$ORACLE_HOME/bin/sqlplus / as sysdba << EOF
    ALTER SYSTEM SET control_files='$ORACLE_BASE/oradata/$ORACLE_SID/control01.ctl' scope=spfile;
    ALTER PLUGGABLE DATABASE $ORACLE_PDB SAVE STATE;
 EOF

@@ -13,12 +13,22 @@
     - "{{oracle_tmp}}"
     - "{{oracle_base}}"
 
+- name: download installer
+  get_url:
+    url: "{{ oracle_installer_uri }}/{{ item.file_name }}"
+    dest: "{{ oracle_tmp }}/{{ item.file_name }}"
+    owner: "{{ oracle_user }}"
+    checksum: "{{ item.checksum }}"
+  register: down_inst
+  with_items: "{{oracle_installer}}"
+
 - name: unzip installer
   unarchive:
-    src: "{{ oracle_installer_uri }}/{{ item }}"
+    src: "{{ oracle_tmp }}/{{ item.file_name }}"
     dest: "{{ oracle_tmp }}"
-    copy: no
     owner: "{{ oracle_user }}"
+    copy: no
+  when: down_inst.changed
   with_items: "{{oracle_installer}}"
 
 - name: compose the oracle automated install and db create settings

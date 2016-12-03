@@ -7,8 +7,9 @@
   args:
       creates: "{{ oracle_base }}/oradata/{{ora_user_env.ORACLE_SID}}"
 - name: set oracle database environment
-  blockinfile:
+  lineinfile:
     dest: /home/{{ oracle_user }}/.bashrc
-    block: |
-      export ORACLE_SID={{ ora_user_env.ORACLE_SID }}
-      export ORACLE_PDB={{ ora_user_env.ORACLE_PDB }}
+    line: "{{item}}"
+  with_items:
+      - export ORACLE_SID={{ ora_user_env.ORACLE_SID }}
+      - export ORACLE_PDB={{ ora_user_env.ORACLE_PDB }}

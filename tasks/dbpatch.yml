@@ -31,6 +31,8 @@
 
 - name: stop oracle
   command: "{{oracle_base}}/stopDB.sh"
+  args:
+    removes: /var/tmp/.oracle/sEXTPROC1
   environment: "{{ ora_user_env }}"
   become: yes
   become_user: "{{ oracle_user }}"
