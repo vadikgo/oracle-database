@@ -20,9 +20,9 @@ if [ "$ORACLE_HOME" == "" ]; then
 fi;
 
 # Stop database
-sqlplus / as sysdba << EOF
+$ORACLE_HOME/bin/sqlplus / as sysdba << EOF
    shutdown immediate;
 EOF
 
 # Stop Listener
-lsnrctl stop
+$ORACLE_HOME/bin/lsnrctl stop

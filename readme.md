@@ -1,4 +1,6 @@
-### ansible role for oracle ee database install
+### Ansible role for Oracle ee database install
+
+Ansible role for Oracle Database install based on https://github.com/oracle/docker-images/blob/master/OracleDatabase/dockerfiles/12.1.0.2/Dockerfile.ee
 
 build docker image
 ```

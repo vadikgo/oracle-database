@@ -13,11 +13,17 @@
 #
 set -e
 
+ORACLE_SID=$1
 # Check whether ORACLE_SID is passed on
-ORACLE_SID=${$1:-ORCLCDB}
+if [ "$ORACLE_SID" == "" ]; then
+  ORACLE_SID=ORCLCDB
+fi;
 
+ORACLE_PDB=$2
 # Check whether ORACLE_PDB is passed on
-ORACLE_PDB=${$2:-ORCLPDB1}
+if [ "$ORACLE_PDB" == "" ]; then
+  ORACLE_PDB=ORCLPDB1
+fi;
 
 # Auto generate ORACLE PWD
 ORACLE_PWD=`openssl rand -base64 8`
