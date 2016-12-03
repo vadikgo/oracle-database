@@ -3,7 +3,7 @@
   become: yes
   become_user: "{{ oracle_user }}"
   environment: "{{ora_user_env}}"
-  command: "{{ oracle_base }}/createDB.sh"
+  command: "{{ oracle_base }}/createDB.sh {{ora_user_env.ORACLE_SID}} {{ora_user_env.ORACLE_PDB}}"
   args:
       creates: "{{ oracle_base }}/oradata/{{ora_user_env.ORACLE_SID}}"
 - name: set oracle database environment

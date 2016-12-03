@@ -10,6 +10,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 #
+set -e
 
 # Check that ORACLE_HOME is set
 if [ "$ORACLE_HOME" == "" ]; then
