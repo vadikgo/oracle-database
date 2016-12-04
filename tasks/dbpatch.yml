@@ -47,9 +47,18 @@
   when: patch_list.stdout.find(item.number) == -1
   with_items: "{{oracle_latest_patches}}"
 
+- name: download patches
+  get_url:
+    url: "{{ oracle_installer_uri }}/{{ item.file_name }}"
+    dest: "{{ oracle_tmp }}/{{ item.file_name | basename }}"
+    owner: "{{ oracle_user }}"
+    checksum: "{{ item.checksum }}"
+  when: patch_list.stdout.find(item.number) == -1
+  with_items: "{{oracle_latest_patches}}"
+
 - name: unzip patches
   unarchive:
-    src: "{{ oracle_installer_uri }}/{{ item.file_name }}"
+    src: "{{ oracle_tmp }}/{{ item.file_name | basename }}"
     dest: "{{ oracle_tmp }}/{{ item.number }}"
     copy: no
     creates: "{{ oracle_tmp }}/{{ item.number }}/{{ item.number }}"

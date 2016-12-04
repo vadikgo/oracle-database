@@ -16,7 +16,7 @@
 - name: download installer
   get_url:
     url: "{{ oracle_installer_uri }}/{{ item.file_name }}"
-    dest: "{{ oracle_tmp }}/{{ item.file_name }}"
+    dest: "{{ oracle_tmp }}/{{ item.file_name | basename }}"
     owner: "{{ oracle_user }}"
     checksum: "{{ item.checksum }}"
   register: down_inst
@@ -24,7 +24,7 @@
 
 - name: unzip installer
   unarchive:
-    src: "{{ oracle_tmp }}/{{ item.file_name }}"
+    src: "{{ oracle_tmp }}/{{ item.file_name | basename }}"
     dest: "{{ oracle_tmp }}"
     owner: "{{ oracle_user }}"
     copy: no
