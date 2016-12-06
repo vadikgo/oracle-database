@@ -10,5 +10,5 @@ docker build --shm-size 1g -t oracledb .
 start docker image for tests
 ```
 cd tests
-ansible-playbook test_oracle_docker.yml -e "oracle_install_db=True oracle_install_db_patch=True"
+ansible-playbook test_oracle_docker.yml -e "oracle_install_db=True oracle_install_db_patch=True oracle_installer_uri=http://192.168.10.140:8000/ora1210"
 ```
