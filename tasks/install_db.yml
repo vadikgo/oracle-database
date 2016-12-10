@@ -75,3 +75,4 @@
     - runOracle.sh
     - startDB.sh
     - stopDB.sh
+    - setPassword.sh
