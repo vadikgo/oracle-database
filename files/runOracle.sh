@@ -10,8 +10,6 @@
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 #
 
-set -e
-
 ########### Move DB files ############
 function moveFiles {
 
@@ -140,6 +138,10 @@ echo "#########################"
 echo "DATABASE IS READY TO USE!"
 echo "#########################"
 
-tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
-childPID=$!
-wait $childPID
+if [ $# == 0 ]; then
+  tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
+  childPID=$!
+  wait $childPID
+else
+  exec "$@"
+fi
