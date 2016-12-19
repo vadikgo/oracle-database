@@ -30,21 +30,22 @@ function moveFiles {
 ########### Symbolic link DB files ############
 function symLinkFiles {
 
-   if [ ! -L $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora ]; then
+   if [ ! -e $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/spfile$ORACLE_SID.ora $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora
    fi;
 
-   if [ ! -L $ORACLE_HOME/dbs/orapw$ORACLE_SID ]; then
+   if [ ! -e $ORACLE_HOME/dbs/orapw$ORACLE_SID ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/orapw$ORACLE_SID $ORACLE_HOME/dbs/orapw$ORACLE_SID
    fi;
 
-   if [ ! -L $ORACLE_HOME/network/admin/tnsnames.ora ]; then
+   if [ ! -e $ORACLE_HOME/network/admin/tnsnames.ora ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/tnsnames.ora $ORACLE_HOME/network/admin/tnsnames.ora
    fi;
 
-   # oracle user does not have permissions in /etc, hence cp and not ln
-   cp $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/oratab /etc/oratab
-
+   if [ ! -e /etc/oratab ]; then
+      # oracle user does not have permissions in /etc, hence cp and not ln
+      cp $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/oratab /etc/oratab
+   fi;
 }
 
 ########### SIGINT handler ############
