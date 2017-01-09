@@ -145,5 +145,9 @@ if [ $# == 0 ]; then
   wait $childPID
 else
   exec "$@"
+<<<<<<< HEAD
   _term()
+=======
+  _int()
+>>>>>>> ff7628c76f2c3832dec04b15a756f93d88860823
 fi
