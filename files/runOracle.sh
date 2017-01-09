@@ -145,4 +145,5 @@ if [ $# == 0 ]; then
   wait $childPID
 else
   exec "$@"
+  _term()
 fi
